@@ -1,0 +1,34 @@
+﻿@model IEnumerable<VidlyMain.Models.Movies>
+@{
+    ViewBag.Title = "Movies";
+}
+
+<h2>Movies</h2>
+
+<td>@Html.ActionLink("Add Movies","Create","Movies")</td>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Movie Name</th>
+        <th>Release Date</th>
+        <th>Stock</th>
+        <th>Genre Name</th>
+    </tr>
+    </thead>
+    
+    <tbody>
+    @foreach (var movies in Model)
+    {
+        <tr>
+            <td>@Html.ActionLink(@movies.Name,"Details",new {id= movies.Id})</td>
+            <td>@movies.ReleaseDate</td>
+            <td>@movies.NumberInStock</td>
+            <td>@movies.Genre.Name</td>
+            <td>@Html.ActionLink("Edit","Details",new {id= movies.Id})</td>
+            <td>@Html.ActionLink("Delete","Delete",new {id = movies.Id})</td>
+        </tr>
+    }
+    </tbody>
+</table>
+

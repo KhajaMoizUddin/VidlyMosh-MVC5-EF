@@ -1,0 +1,64 @@
+﻿@model IEnumerable<VidlyMain.Models.Customer>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<td>@Html.ActionLink("Add Customer","AddCustomer","Customers")</td>
+
+<table class="table table-bordered table-hover" id="customers">
+    <thead>
+    <tr>
+        <th>Customers</th>
+        <th>Discount Rate</th>
+        <th>MemberShip Name</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+    @foreach (var customer in Model)
+    {
+        <tr>
+            <td>@Html.ActionLink(@customer.Name,"Details",new {id = customer.Id}) </td>
+            <td>@customer.MembershipType.DiscountRate %</td>
+            <td>@customer.MembershipType.Name</td>
+            <td>@Html.ActionLink("Edit","Details", new {id=customer.Id})</td>
+            <td><button data-customer-id="@customer.Id" class="btn-link js-delete">Delete</button></td>
+            @*<td>@Html.ActionLink("Delete","Delete",new {id= customer.Id})</td>*@
+ </tr>
+    }
+    </tbody>
+
+</table>
+
+@section scripts
+{
+    <script>
+        /*To Delete a Customer Record in JS*/
+        $(document).ready(function () {
+
+            $("#customers").DataTable();
+
+            $("#customers .js-delete").on("click",function () {
+                   
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete?", function(result) {
+                    if (result) {
+                        debugger; 
+                        $.ajax({
+                            url: "/api/customers/" + button.attr("data-customer-id"),
+                            method: "DELETE",
+                            success: function() {
+                                button.parents("tr").remove();
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
